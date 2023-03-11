@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/jannickfahlbusch/CarStatsViewer-Exporter/pkg/metrics"
-	"github.com/jannickfahlbusch/CarStatsViewer-Exporter/pkg/types"
+	"pkg.jf-projects.de/carstatsviewer-exporter/pkg/metrics"
+	"pkg.jf-projects.de/carstatsviewer-exporter/pkg/types"
 )
 
 type LiveDataHandler struct{}

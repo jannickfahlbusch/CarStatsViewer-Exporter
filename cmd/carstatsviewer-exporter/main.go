@@ -2,10 +2,11 @@ package main
 
 import (
 	"flag"
-	"github.com/jannickfahlbusch/CarStatsViewer-Exporter/pkg/data"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"pkg.jf-projects.de/carstatsviewer-exporter/pkg/data"
 )
 
 var addr = flag.String("listen-address", ":8080", "The address to listen on for HTTP requests.")
