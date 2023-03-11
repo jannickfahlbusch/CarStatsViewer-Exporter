@@ -3,10 +3,11 @@ package data
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/jannickfahlbusch/CarStatsViewer-Exporter/pkg/metrics"
-	"github.com/jannickfahlbusch/CarStatsViewer-Exporter/pkg/types"
 	"log"
 	"net/http"
+
+	"github.com/jannickfahlbusch/CarStatsViewer-Exporter/pkg/metrics"
+	"github.com/jannickfahlbusch/CarStatsViewer-Exporter/pkg/types"
 )
 
 type LiveDataHandler struct{}
@@ -21,7 +22,7 @@ func (handler *LiveDataHandler) ServeHTTP(rw http.ResponseWriter, request *http.
 		log.Println(err)
 	}
 
-	metrics.Speed.WithLabelValues().Set(data.Speed)
-	metrics.StateOfCharge.WithLabelValues(fmt.Sprintf("%t", data.IsCharging), fmt.Sprintf("%t", data.IsParked)).Set(data.StateOfCharge)
+	metrics.Speed.Set(data.Speed)
+	metrics.StateOfCharge.Set(data.StateOfCharge)
 	metrics.Power.WithLabelValues(fmt.Sprintf("%t", data.IsCharging), fmt.Sprintf("%t", data.IsParked)).Set(data.Power)
 }

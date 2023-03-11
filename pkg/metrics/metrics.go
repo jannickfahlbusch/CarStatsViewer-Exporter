@@ -8,21 +8,21 @@ const (
 )
 
 var (
-	Speed = prometheus.NewGaugeVec(
+	Speed = prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: Namespace,
 			Subsystem: SubSystem,
 			Name:      "speed",
 			Help:      "Speed of the Car",
-		}, []string{})
+		})
 
-	StateOfCharge = prometheus.NewGaugeVec(
+	StateOfCharge = prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Namespace: Namespace,
 			Subsystem: SubSystem,
 			Name:      "state_of_charge",
 			Help:      "Battery state of charge",
-		}, []string{"charging", "parked"})
+		})
 
 	Power = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
