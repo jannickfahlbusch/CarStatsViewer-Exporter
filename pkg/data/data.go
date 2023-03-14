@@ -22,7 +22,21 @@ func (handler *LiveDataHandler) ServeHTTP(rw http.ResponseWriter, request *http.
 		log.Println(err)
 	}
 
-	metrics.Speed.Set(data.CurrentSpeed)
-	metrics.StateOfCharge.Set(float64(data.StateOfCharge))
+	metrics.SubmittedDataPoints.Inc()
+
+	metrics.AmbientTemperature.Set(data.AmbientTemperature)
+	metrics.AverageConsumption.Set(data.AvgConsumption)
+	metrics.AverageSpeed.Set(data.AvgSpeed)
+	metrics.BatteryLevel.Set(data.BatteryLevel)
+	metrics.ChargedEnergy.Set(data.ChargedEnergy)
+	metrics.Gear.Set(float64(data.CurrentGear))
+	metrics.IgnitionState.Set(float64(data.CurrentIgnitionState))
 	metrics.Power.WithLabelValues(fmt.Sprintf("%t", data.IsCharging), fmt.Sprintf("%t", data.IsFastCharging), fmt.Sprintf("%t", data.IsParked)).Set(data.CurrentPower)
+	metrics.Speed.Set(data.CurrentSpeed)
+	metrics.DriveState.Set(float64(data.DriveState))
+	metrics.StateOfCharge.Set(float64(data.StateOfCharge))
+	metrics.InstantConsumption.Set(data.InstConsumption)
+	metrics.MaxBatteryLevel.Set(data.MaxBatteryLevel)
+	metrics.TraveledDistance.Set(data.TraveledDistance)
+	metrics.UsedEnergy.Set(data.UsedEnergy)
 }
