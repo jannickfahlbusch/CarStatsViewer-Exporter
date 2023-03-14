@@ -30,7 +30,7 @@ var (
 			Subsystem: SubSystem,
 			Name:      "power",
 			Help:      "Power usage",
-		}, []string{"charging", "parked"})
+		}, []string{"charging", "fastcharging", "parked"})
 )
 
 func init() {

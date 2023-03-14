@@ -22,7 +22,7 @@ func (handler *LiveDataHandler) ServeHTTP(rw http.ResponseWriter, request *http.
 		log.Println(err)
 	}
 
-	metrics.Speed.Set(data.Speed)
-	metrics.StateOfCharge.Set(data.StateOfCharge)
-	metrics.Power.WithLabelValues(fmt.Sprintf("%t", data.IsCharging), fmt.Sprintf("%t", data.IsParked)).Set(data.Power)
+	metrics.Speed.Set(data.CurrentSpeed)
+	metrics.StateOfCharge.Set(float64(data.StateOfCharge))
+	metrics.Power.WithLabelValues(fmt.Sprintf("%t", data.IsCharging), fmt.Sprintf("%t", data.IsFastCharging), fmt.Sprintf("%t", data.IsParked)).Set(data.CurrentPower)
 }
