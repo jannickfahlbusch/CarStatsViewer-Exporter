@@ -24,4 +24,12 @@ type LiveData struct {
 	TraveledDistance     float64 `json:"traveledDistance"`
 	TripStartDate        string  `json:"tripStartDate"`
 	UsedEnergy           float64 `json:"usedEnergy"`
+
+	Latitude  float64 `json:"lat,omitempty"`
+	Longitude float64 `json:"lon,omitempty"`
+	Altitude  float64 `json:"alt,omitempty"`
+}
+
+func (liveData *LiveData) HasCoordinates() bool {
+	return liveData.Latitude != 0 && liveData.Longitude != 0
 }

@@ -4,4 +4,4 @@ ADD . /app/
 WORKDIR /app
 RUN go build -o main cmd/carstatsviewer-exporter/main.go
 
-CMD ["/app/main"]
+ENTRYPOINT ["/app/main"]

@@ -2,7 +2,11 @@ module pkg.jf-projects.de/carstatsviewer-exporter
 
 go 1.20
 
-require github.com/prometheus/client_golang v1.14.0
+require (
+	github.com/pkg/errors v0.9.1
+	github.com/prometheus/client_golang v1.14.0
+	pkg.jf-projects.de/owntracks v0.0.6
+)
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
