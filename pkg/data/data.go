@@ -7,6 +7,7 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"pkg.jf-projects.de/carstatsviewer-exporter/pkg/data/cache"
 	"time"
 
 	"github.com/pkg/errors"
@@ -22,6 +23,7 @@ type Owntracks struct {
 	User   string
 	Device string
 }
+
 type LiveDataHandler struct {
 	Owntracks *Owntracks
 }
@@ -37,6 +39,8 @@ func (handler *LiveDataHandler) ServeHTTP(rw http.ResponseWriter, request *http.
 	}
 
 	metrics.SubmittedDataPoints.Inc()
+
+	cache.SetLastPayload(data)
 
 	metrics.AmbientTemperature.Set(data.AmbientTemperature)
 	metrics.AverageConsumption.Set(data.AvgConsumption)
@@ -54,13 +58,17 @@ func (handler *LiveDataHandler) ServeHTTP(rw http.ResponseWriter, request *http.
 	metrics.TraveledDistance.Set(data.TraveledDistance)
 	metrics.UsedEnergy.Set(data.UsedEnergy)
 
-	if data.HasCoordinates() && handler.Owntracks.Enabled() {
+	if data.HasCoordinates() && handler.OwntracksEnabled() {
 		err = handler.Owntracks.Publish(request.Context(), data)
 		if err != nil {
 			log.Println(err)
 			rw.WriteHeader(http.StatusInternalServerError)
 		}
 	}
+}
+
+func (handler *LiveDataHandler) OwntracksEnabled() bool {
+	return handler.Owntracks != nil && handler.Owntracks.Enabled()
 }
 
 func (ot *Owntracks) Enabled() bool {

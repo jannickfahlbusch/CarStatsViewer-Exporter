@@ -35,6 +35,7 @@ func main() {
 
 	http.Handle("/live", liveDataHandler)
 	http.Handle("/metrics", promhttp.Handler())
+	http.Handle("/data", &data.Proxyhandler{})
 
 	log.Printf("Listening on %s\n", *addr)
 	log.Fatal(http.ListenAndServe(*addr, nil))
