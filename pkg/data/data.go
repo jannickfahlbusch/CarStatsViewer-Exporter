@@ -7,8 +7,9 @@ import (
 	"log"
 	"math"
 	"net/http"
-	"pkg.jf-projects.de/carstatsviewer-exporter/pkg/data/cache"
 	"time"
+
+	"pkg.jf-projects.de/carstatsviewer-exporter/pkg/data/cache"
 
 	"github.com/pkg/errors"
 	types2 "pkg.jf-projects.de/owntracks/types"
@@ -52,7 +53,7 @@ func (handler *LiveDataHandler) ServeHTTP(rw http.ResponseWriter, request *http.
 	metrics.Power.WithLabelValues(fmt.Sprintf("%t", data.IsCharging), fmt.Sprintf("%t", data.IsFastCharging), fmt.Sprintf("%t", data.IsParked)).Set(data.CurrentPower)
 	metrics.Speed.Set(data.CurrentSpeed)
 	metrics.DriveState.Set(float64(data.DriveState))
-	metrics.StateOfCharge.Set(float64(data.StateOfCharge))
+	metrics.StateOfCharge.Set(data.StateOfCharge)
 	metrics.InstantConsumption.Set(data.InstConsumption)
 	metrics.MaxBatteryLevel.Set(data.MaxBatteryLevel)
 	metrics.TraveledDistance.Set(data.TraveledDistance)
@@ -77,13 +78,16 @@ func (ot *Owntracks) Enabled() bool {
 
 func (ot *Owntracks) Publish(ctx context.Context, data *types.LiveData) error {
 	currentTime := time.Now()
+
+	soc := int(data.StateOfCharge * 100)
+
 	payload := &types2.Location{
 		Type:      types2.LocationType,
 		EpochTime: currentTime.Unix(),
 		Timestamp: &currentTime,
 		Altitude:  data.Altitude,
 		Battery: types2.Battery{
-			BatteryLevel: data.StateOfCharge,
+			BatteryLevel: soc,
 		},
 		WiFi:              types2.WiFi{},
 		Latitude:          data.Latitude,
