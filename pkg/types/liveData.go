@@ -19,7 +19,7 @@ type LiveData struct {
 	IsFastCharging       bool    `json:"isFastCharging"`
 	IsParked             bool    `json:"isParked"`
 	MaxBatteryLevel      float64 `json:"maxBatteryLevel"`
-	StateOfCharge        int     `json:"stateOfCharge"`
+	StateOfCharge        float64 `json:"stateOfCharge"`
 	TravelTime           int     `json:"travelTime"`
 	TraveledDistance     float64 `json:"traveledDistance"`
 	TripStartDate        string  `json:"tripStartDate"`
