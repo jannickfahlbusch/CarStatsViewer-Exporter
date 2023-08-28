@@ -18,7 +18,6 @@ func (handler *Proxyhandler) ServeHTTP(rw http.ResponseWriter, request *http.Req
 		log.Println(err)
 		rw.WriteHeader(http.StatusNoContent)
 		return
-		return
 	}
 
 	err = json.NewEncoder(rw).Encode(lastPayload)

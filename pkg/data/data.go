@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"math"
 	"net/http"
 	"time"
 
@@ -43,21 +42,11 @@ func (handler *LiveDataHandler) ServeHTTP(rw http.ResponseWriter, request *http.
 
 	cache.SetLastPayload(data)
 
-	metrics.AmbientTemperature.Set(data.AmbientTemperature)
-	metrics.AverageConsumption.Set(data.AvgConsumption)
-	metrics.AverageSpeed.Set(data.AvgSpeed)
+	metrics.Speed.Set(data.Speed)
+	metrics.Power.WithLabelValues(fmt.Sprintf("%t", data.ChargePortConnected)).Set(data.Power)
 	metrics.BatteryLevel.Set(data.BatteryLevel)
-	metrics.ChargedEnergy.Set(data.ChargedEnergy)
-	metrics.Gear.Set(float64(data.CurrentGear))
-	metrics.IgnitionState.Set(float64(data.CurrentIgnitionState))
-	metrics.Power.WithLabelValues(fmt.Sprintf("%t", data.IsCharging), fmt.Sprintf("%t", data.IsFastCharging), fmt.Sprintf("%t", data.IsParked)).Set(data.CurrentPower)
-	metrics.Speed.Set(data.CurrentSpeed)
-	metrics.DriveState.Set(float64(data.DriveState))
 	metrics.StateOfCharge.Set(data.StateOfCharge)
-	metrics.InstantConsumption.Set(data.InstConsumption)
-	metrics.MaxBatteryLevel.Set(data.MaxBatteryLevel)
-	metrics.TraveledDistance.Set(data.TraveledDistance)
-	metrics.UsedEnergy.Set(data.UsedEnergy)
+	metrics.AmbientTemperature.Set(data.AmbientTemperature)
 
 	if data.HasCoordinates() && handler.OwntracksEnabled() {
 		err = handler.Owntracks.Publish(request.Context(), data)
@@ -89,16 +78,15 @@ func (ot *Owntracks) Publish(ctx context.Context, data *types.LiveData) error {
 		Battery: types2.Battery{
 			BatteryLevel: soc,
 		},
-		WiFi:              types2.WiFi{},
-		Latitude:          data.Latitude,
-		Longitude:         data.Longitude,
-		Trigger:           types2.TriggerPing,
-		TrackerID:         "ps",
-		Velocity:          data.CurrentSpeed,
-		DistanceTravelled: int(math.Round(data.TraveledDistance)),
+		WiFi:      types2.WiFi{},
+		Latitude:  data.Latitude,
+		Longitude: data.Longitude,
+		Trigger:   types2.TriggerPing,
+		TrackerID: "ps",
+		Velocity:  data.Speed,
 	}
 
-	if data.IsCharging || data.IsFastCharging {
+	if data.ChargePortConnected {
 		payload.Battery.BatteryStatus = types2.BatteryStatusCharging
 	}
 
