@@ -15,12 +15,16 @@ var (
 	otUser   = flag.String("owntracks-user", "csv-exporter", "Value the user should be set to for Owntracks locations")
 	otDevice = flag.String("owntracks-device", "car", "Value the device should be set to for Owntracks locations")
 	otURL    = flag.String("owntracks-url", "", "URL of the Owntracks Server. This enables/disables the Owntracks integration")
+
+	logTelegrams = flag.Bool("logTelegrams", false, "Log all received telegrams to stdout for debugging. Defaults to false")
 )
 
 func main() {
 	flag.Parse()
 
-	liveDataHandler := &data.LiveDataHandler{}
+	liveDataHandler := &data.LiveDataHandler{
+		LogTelegrams: *logTelegrams,
+	}
 
 	if otURL != nil && *otURL != "" {
 		log.Printf("Owntracks integration enabled. Will report locations to %s with user %s and device %s\n", *otURL, *otUser, *otDevice)

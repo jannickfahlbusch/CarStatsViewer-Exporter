@@ -25,7 +25,8 @@ type Owntracks struct {
 }
 
 type LiveDataHandler struct {
-	Owntracks *Owntracks
+	Owntracks    *Owntracks
+	LogTelegrams bool
 }
 
 func (handler *LiveDataHandler) ServeHTTP(rw http.ResponseWriter, request *http.Request) {
@@ -36,6 +37,14 @@ func (handler *LiveDataHandler) ServeHTTP(rw http.ResponseWriter, request *http.
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		log.Println(err)
+	}
+
+	if handler.LogTelegrams {
+		payload, err := json.Marshal(data)
+		if err != nil {
+			log.Printf("Failed to encode payload: %v\n", err)
+		}
+		log.Printf("Received payload: %v\n", string(payload))
 	}
 
 	metrics.SubmittedDataPoints.Inc()
