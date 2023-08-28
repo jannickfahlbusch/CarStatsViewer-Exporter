@@ -1,0 +1,40 @@
+name: Build and Push image
+
+on:
+  push:
+    branches:
+      - "main"
+
+env:
+  REGISTRY: ${{ secrets.REGISTRY }}
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    container:
+      image: catthehacker/ubuntu:act-latest
+
+    steps:
+      - name: Checkout
+        uses: https://gitea.com/actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: https://github.com/docker/setup-buildx-action@v2
+
+      - name: Log in to the Container registry
+        uses: https://github.com/docker/login-action@v2
+        with:
+          registry: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: https://github.com/docker/build-push-action@v4
+        env:
+          ACTIONS_RUNTIME_TOKEN: ''
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.IMAGE_NAME }}
