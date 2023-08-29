@@ -23,7 +23,7 @@ type ChargingSessions struct {
 }
 
 type LiveData struct {
-	APIVersion          string  `json:"apiVersion"`
+	APIVersion          float64 `json:"apiVersion"`
 	AppVersion          string  `json:"appVersion"`
 	Timestamp           int64   `json:"timestamp"`
 	Speed               float64 `json:"speed"`
