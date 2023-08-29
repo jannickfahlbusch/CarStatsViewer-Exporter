@@ -1,5 +1,7 @@
 package types
 
+import "encoding/json"
+
 type DrivingPoints struct {
 	Timestamp       int64   `json:"driving_point_epoch_time"`
 	EnergyDelta     float64 `json:"energy_delta"`
@@ -23,17 +25,17 @@ type ChargingSessions struct {
 }
 
 type LiveData struct {
-	APIVersion          float64 `json:"apiVersion"`
-	AppVersion          string  `json:"appVersion"`
-	Timestamp           int64   `json:"timestamp"`
-	Speed               float64 `json:"speed"`
-	Power               float64 `json:"power"`
-	SelectedGear        string  `json:"selectedGear"`
-	IgnitionState       string  `json:"ignitionState"`
-	ChargePortConnected bool    `json:"chargePortConnected"`
-	BatteryLevel        float64 `json:"batteryLevel"`
-	StateOfCharge       float64 `json:"stateOfCharge"`
-	AmbientTemperature  float64 `json:"ambientTemperature"`
+	APIVersion          json.Number `json:"apiVersion"`
+	AppVersion          string      `json:"appVersion"`
+	Timestamp           int64       `json:"timestamp"`
+	Speed               float64     `json:"speed"`
+	Power               float64     `json:"power"`
+	SelectedGear        string      `json:"selectedGear"`
+	IgnitionState       string      `json:"ignitionState"`
+	ChargePortConnected bool        `json:"chargePortConnected"`
+	BatteryLevel        float64     `json:"batteryLevel"`
+	StateOfCharge       float64     `json:"stateOfCharge"`
+	AmbientTemperature  float64     `json:"ambientTemperature"`
 
 	Latitude  float64 `json:"lat,omitempty"`
 	Longitude float64 `json:"lon,omitempty"`
