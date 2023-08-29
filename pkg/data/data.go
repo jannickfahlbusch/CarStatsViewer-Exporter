@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"time"
@@ -40,7 +41,7 @@ func (handler *LiveDataHandler) ServeHTTP(rw http.ResponseWriter, request *http.
 	}
 
 	if handler.LogTelegrams {
-		payload, err := json.Marshal(data)
+		payload, err := io.ReadAll(request.Body)
 		if err != nil {
 			log.Printf("Failed to encode payload: %v\n", err)
 		}
