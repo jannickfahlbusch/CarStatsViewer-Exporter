@@ -2,7 +2,7 @@ package types
 
 import "encoding/json"
 
-type DrivingPoints struct {
+type DrivingPoint struct {
 	Timestamp       int64   `json:"driving_point_epoch_time"`
 	EnergyDelta     float64 `json:"energy_delta"`
 	DistaceDelta    float64 `json:"distance_delta"`
@@ -13,7 +13,7 @@ type DrivingPoints struct {
 	Altitude        float64 `json:"alt,omitempty"`
 }
 
-type ChargingSessions struct {
+type ChargingSession struct {
 	StartDate          int64   `json:"start_epoch_time"`
 	EndDate            int64   `json:"end_epoc_time"`
 	ChargedEnergy      float64 `json:"charged_energy"`
@@ -41,8 +41,8 @@ type LiveData struct {
 	Longitude float64 `json:"lon,omitempty"`
 	Altitude  float64 `json:"alt,omitempty"`
 
-	DrivingPoints    *DrivingPoints    `json:"drivingPoints,omitempty"`
-	ChargingSessions *ChargingSessions `json:"chargingSessions,omitempty"`
+	DrivingPoints    []*DrivingPoint    `json:"drivingPoints,omitempty"`
+	ChargingSessions []*ChargingSession `json:"chargingSessions,omitempty"`
 }
 
 func (liveData *LiveData) HasCoordinates() bool {
