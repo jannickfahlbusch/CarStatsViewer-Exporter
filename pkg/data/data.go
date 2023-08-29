@@ -32,16 +32,21 @@ type LiveDataHandler struct {
 
 func (handler *LiveDataHandler) ServeHTTP(rw http.ResponseWriter, request *http.Request) {
 	defer request.Body.Close()
-	decoder := json.NewDecoder(request.Body)
+
+	payload, err := io.ReadAll(request.Body)
+	if err != nil {
+		rw.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
+	}
 	var data *types.LiveData
-	err := decoder.Decode(&data)
+
+	err = json.Unmarshal(payload, &data)
 	if err != nil {
 		rw.WriteHeader(http.StatusBadRequest)
 		log.Println(err)
 	}
 
 	if handler.LogTelegrams {
-		payload, err := io.ReadAll(request.Body)
 		if err != nil {
 			log.Printf("Failed to encode payload: %v\n", err)
 		}
