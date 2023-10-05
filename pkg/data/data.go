@@ -98,7 +98,7 @@ func (ot *Owntracks) Publish(ctx context.Context, data *types.LiveData) error {
 		Longitude: data.Longitude,
 		Trigger:   types2.TriggerPing,
 		TrackerID: "ps",
-		Velocity:  data.Speed,
+		Velocity:  data.Speed * 3.6, // Speed is in m/s, we want km/h here
 	}
 
 	if data.ChargePortConnected {
