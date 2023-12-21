@@ -12,7 +12,7 @@ import (
 	"pkg.jf-projects.de/carstatsviewer-exporter/pkg/data/cache"
 
 	"github.com/pkg/errors"
-	types2 "pkg.jf-projects.de/owntracks/types"
+	owntracksTypes "pkg.jf-projects.de/owntracks/types"
 
 	"pkg.jf-projects.de/carstatsviewer-exporter/pkg/metrics"
 	"pkg.jf-projects.de/carstatsviewer-exporter/pkg/types"
@@ -85,24 +85,24 @@ func (ot *Owntracks) Publish(ctx context.Context, data *types.LiveData) error {
 
 	soc := int(data.StateOfCharge * 100)
 
-	payload := &types2.Location{
-		Type:      types2.LocationType,
+	payload := &owntracksTypes.Location{
+		Type:      owntracksTypes.LocationType,
 		EpochTime: currentTime.Unix(),
 		Timestamp: &currentTime,
 		Altitude:  data.Altitude,
-		Battery: types2.Battery{
+		Battery: owntracksTypes.Battery{
 			BatteryLevel: soc,
 		},
-		WiFi:      types2.WiFi{},
+		WiFi:      owntracksTypes.WiFi{},
 		Latitude:  data.Latitude,
 		Longitude: data.Longitude,
-		Trigger:   types2.TriggerPing,
+		Trigger:   owntracksTypes.TriggerPing,
 		TrackerID: "ps",
 		Velocity:  data.Speed * 3.6, // Speed is in m/s, we want km/h here
 	}
 
 	if data.ChargePortConnected {
-		payload.Battery.BatteryStatus = types2.BatteryStatusCharging
+		payload.Battery.BatteryStatus = owntracksTypes.BatteryStatusCharging
 	}
 
 	err := ot.Client.Publish(ctx, ot.User, ot.Device, payload)
