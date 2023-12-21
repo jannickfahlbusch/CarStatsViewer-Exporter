@@ -7,7 +7,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"time"
 
 	"pkg.jf-projects.de/carstatsviewer-exporter/pkg/data/cache"
 
@@ -81,14 +80,12 @@ func (ot *Owntracks) Enabled() bool {
 }
 
 func (ot *Owntracks) Publish(ctx context.Context, data *types.LiveData) error {
-	currentTime := time.Now()
-
 	soc := int(data.StateOfCharge * 100)
 
 	payload := &owntracksTypes.Location{
 		Type:      owntracksTypes.LocationType,
-		EpochTime: currentTime.Unix(),
-		Timestamp: &currentTime,
+		EpochTime: data.Timestamp.Unix(),
+		Timestamp: &data.Timestamp.Time,
 		Altitude:  data.Altitude,
 		Battery: owntracksTypes.Battery{
 			BatteryLevel: soc,
